@@ -29,6 +29,17 @@ def make_messages():
     db.session.add_all(messages)
     db.session.commit()        
 
+@app.route('/messages/<int:id>', methods=['DELETE'])
+def delete_message(id):
+    message = Message.query.get(id)
+    if not message:
+        return make_response({"error": "Message not found"}, 404)
+
+    db.session.delete(message)
+    db.session.commit()
+    return make_response({"message": "Message deleted successfully"}, 200)
+
+
 if __name__ == '__main__':
     with app.app_context():
         make_messages()
